@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
     SafeAreaView,
     ScrollView,
@@ -25,16 +25,25 @@ const back = require('../img/back.png')
 
 export default TakePicture = () => {
 
+    const [base, setBase] = useState('')
+    const [date, setDate] = useState(new Date)
+    const [dateString, setDateString] = useState('')
+
     const camera = useRef()
     // const navigation = useNavigation()
 
+    useEffect(() => {
+        setDateString(date.getFullYear() + '-' + date.getMonth() + '-' + date.getDate())
+        console.log(date.getFullYear() + '-' + date.getMonth() + '-' + date.getDate());
+    }, [])
+
 
     const takePicture = async function (camera) {
-        const options = { quality: 0.3, base64: true, width: 800, fixOrientation: true };
+        const options = { quality: 0.5, base64: true, width: 800, fixOrientation: true };
         const data = await camera.takePictureAsync(options);
-
+        // setBase(data.base64)
         // console.log(data.base64);
-
+        imgpost(data.base64)
         // imgpost(data.base64);
         // setTimeout(() => {
         //   navigation.navigate('제품위치')
@@ -44,18 +53,23 @@ export default TakePicture = () => {
     function imgpost(img) {
         try {
             axios.post('https://ip0154.cafe24.com/restapi/post.php', {
-                params: {
-                    type: 'imgtest',
-                    img: img
-
+                type: 'new_inside_picture',
+                img: img,
+                id: 'test1',
+                imgdate: dateString,
+                headers: {
+                    'Content-Type': 'application/json'
                 }
             }).then(async (res) => {
-                console.log(res)
+                console.log(res.data)
+            }).catch((res) => {
+                console.log(res);
             })
         } catch (error) {
             console.error(error)
         }
     }
+
 
 
     return (
@@ -100,7 +114,7 @@ export default TakePicture = () => {
                     </TouchableWithoutFeedback>
                     {/* < 끝 */}
 
-                    <Text style={{ fontSize: 20, color: 'black', fontWeight: 'bold' }}>화장품을 찍어주세요</Text>
+                    <Text style={{ fontSize: 20, color: 'black', fontWeight: 'bold' }}>내부 사진을 찍어주세요</Text>
 
 
                     <View style={{ width: 40, height: 40 }}>
