@@ -17,6 +17,8 @@ import { RNCamera } from 'react-native-camera';
 import { useNavigation } from '@react-navigation/native';
 import AutoHeightImage from 'react-native-auto-height-image';
 import axios from 'axios';
+import { useRecoilState } from 'recoil';
+import { pid } from '../atoms/atom';
 
 const chwidth = Dimensions.get('screen').width
 const chheight = Dimensions.get('screen').height
@@ -29,6 +31,7 @@ export default TakePicture = () => {
     const [base, setBase] = useState('')
     const [date, setDate] = useState(new Date)
     const [dateString, setDateString] = useState('')
+    const [atid, setAtid] = useRecoilState(pid);
 
     const camera = useRef()
     const navigation = useNavigation()
@@ -67,7 +70,7 @@ export default TakePicture = () => {
             axios.post('https://ip0154.cafe24.com/restapi/post.php', {
                 type: 'new_inside_picture',
                 img: img,
-                id: 'test1',
+                id: atid,
                 imgdate: dateString,
                 headers: {
                     'Content-Type': 'application/json'
@@ -141,9 +144,6 @@ export default TakePicture = () => {
 
             </View>
             {/* 헤더 끝 */}
-
-
-
 
         </SafeAreaView>
     )
