@@ -9,7 +9,8 @@ import {
     View,
     Dimensions,
     TouchableWithoutFeedback,
-    TouchableOpacity
+    TouchableOpacity,
+    BackHandler
 } from 'react-native';
 
 import { RNCamera } from 'react-native-camera';
@@ -30,13 +31,24 @@ export default TakePicture = () => {
     const [dateString, setDateString] = useState('')
 
     const camera = useRef()
-    // const navigation = useNavigation()
+    const navigation = useNavigation()
 
     useEffect(() => {
         setDateString(date.getFullYear() + '-' + date.getMonth() + '-' + date.getDate())
         console.log(date.getFullYear() + '-' + date.getMonth() + '-' + date.getDate());
     }, [])
 
+    const backAction = () => {
+        navigation.goBack()
+        return true;
+    };
+
+    useEffect(() => {
+        BackHandler.addEventListener("hardwareBackPress", backAction);
+
+        return () =>
+            BackHandler.removeEventListener("hardwareBackPress", backAction);
+    }, []);
 
     const takePicture = async function (camera) {
         const options = { quality: 0.5, base64: true, width: 800, fixOrientation: true };
@@ -62,6 +74,9 @@ export default TakePicture = () => {
                 }
             }).then(async (res) => {
                 console.log(res.data)
+                setTimeout(() => {
+                    navigation.navigate('사진보기')
+                }, 1500);
             }).catch((res) => {
                 console.log(res);
             })
