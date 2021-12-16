@@ -103,15 +103,11 @@ export default TakePicture = () => {
                     buttonPositive: '확인',
                     buttonNegative: '취소',
                 }}>
-
                 {({ camera, status, recordAudioPermissionStatus }) => {
                     if (status !== 'READY') return <PendingView />;
                     return (
                         <View style={{ alignItems: 'center', justifyContent: 'flex-end', flex: 1 }}>
                             <TouchableOpacity onPress={() => takePicture(camera)} style={styles.capture}>
-                                {/* <View style={{ width: 50, height: 50, borderRadius: 40, backgroundColor: 'white', alignItems: 'center', justifyContent: 'center' }}>
-                                    <Text style={{}}>촬영</Text>
-                                </View> */}
                                 <AutoHeightImage source={cameras} width={110}></AutoHeightImage>
                             </TouchableOpacity>
                         </View>
@@ -134,14 +130,10 @@ export default TakePicture = () => {
 
                     <Text style={{ fontSize: 20, color: 'black', fontWeight: 'bold' }}>내부 사진을 찍어주세요</Text>
 
-
                     <View style={{ width: 40, height: 40 }}>
-
                     </View>
 
-
                 </View>
-
             </View>
             {/* 헤더 끝 */}
 
